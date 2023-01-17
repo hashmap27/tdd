@@ -27,6 +27,18 @@ public class PasswordStrengthMeter {
             return PasswordStrength.NORMAL;
         }
 
+        // 대문자 미포함의 경우
+        boolean containsUpp = false;
+        for(char ch : s.toCharArray()) {
+            if(Character.isUpperCase(ch)) {
+                containsUpp = true;
+                break;
+            }
+        }
+        if(!containsUpp) {
+            return PasswordStrength.NORMAL;
+        }
+
         return PasswordStrength.STRONG;
     }
 }

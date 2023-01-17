@@ -1,14 +1,16 @@
 package com.example.tdd.chapter02;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class PasswordStrengthMeterTest {
+
+    private final PasswordStrengthMeter meter = new PasswordStrengthMeter();
+    private void assertStrength(String password, PasswordStrength expStr) {
+        PasswordStrength result = meter.meter(password);
+        assertThat(result).isEqualTo(expStr);
+    }
 
     @Test
     void name() {
@@ -17,36 +19,32 @@ public class PasswordStrengthMeterTest {
 
     @Test
     void meetsAllCriteria_Then_String() {
-        PasswordStrengthMeter meter = new PasswordStrengthMeter();
-        PasswordStrength result = meter.meter("ab12!@AB");
-        assertThat(result).isEqualTo(PasswordStrength.STRONG);
+        assertStrength("ab12!@AB", PasswordStrength.STRONG);
     }
 
     @Test
     void meetsOtherCriteria_except_for_Length_Then_Normal() {
-        PasswordStrengthMeter meter = new PasswordStrengthMeter();
-        PasswordStrength result = meter.meter("ab12!@A");
-        assertThat(result).isEqualTo(PasswordStrength.NORMAL);
+        assertStrength("ab12!@A", PasswordStrength.NORMAL);
     }
 
     @Test
     void meetsOtherCriteria_except_for_number_Then_Normal() {
-        PasswordStrengthMeter meter = new PasswordStrengthMeter();
-        PasswordStrength result = meter.meter("ab!@ABqwer");
-        assertThat(result).isEqualTo(PasswordStrength.NORMAL);
+        assertStrength("ab!@ABqwer", PasswordStrength.NORMAL);
     }
 
     @Test
     void nullInput_Then_Invalid() {
-        PasswordStrengthMeter meter = new PasswordStrengthMeter();
-        PasswordStrength result = meter.meter(null);
-        assertThat(result).isEqualTo(PasswordStrength.INVALID);
+        assertStrength(null, PasswordStrength.INVALID);
     }
 
     @Test
     void emptyInput_Then_Invalid() {
-        PasswordStrengthMeter meter = new PasswordStrengthMeter();
-        PasswordStrength result = meter.meter("");
-        assertThat(result).isEqualTo(PasswordStrength.INVALID);
+        assertStrength("", PasswordStrength.INVALID);
     }
+
+    @Test
+    void meetsOtherCriteria_except_for_uppercase_Then_Normal() {
+        assertStrength("ab12!@df", PasswordStrength.NORMAL);
+    }
+
 }
