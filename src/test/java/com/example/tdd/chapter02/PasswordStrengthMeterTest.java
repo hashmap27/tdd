@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.awt.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class PasswordStrengthMeterTest {
 
@@ -35,4 +36,17 @@ public class PasswordStrengthMeterTest {
         assertThat(result).isEqualTo(PasswordStrength.NORMAL);
     }
 
+    @Test
+    void nullInput_Then_Invalid() {
+        PasswordStrengthMeter meter = new PasswordStrengthMeter();
+        PasswordStrength result = meter.meter(null);
+        assertThat(result).isEqualTo(PasswordStrength.INVALID);
+    }
+
+    @Test
+    void emptyInput_Then_Invalid() {
+        PasswordStrengthMeter meter = new PasswordStrengthMeter();
+        PasswordStrength result = meter.meter("");
+        assertThat(result).isEqualTo(PasswordStrength.INVALID);
+    }
 }
